@@ -64,9 +64,39 @@ def create_cupcake():
 
     return (jsonify(cupcake=serialized),201)
 
+@app.patch("/api/cupcakes/<int:cupcake_id>")
+def update_single_cupcake(cupcake_id):
+    """ Updates any of (flavor,size,rating,image_url) in cupcake.
+
+        Returns JSON on updated cupcake {cupcake : {...}}
+    """
+    cupcake = Cupcake.query.get_or_404(cupcake_id)
 
 
+    cupcake.flavor = request.json.get('flavor')
+    cupcake.size = request.json.get('size')
+    cupcake.rating = request.json.get('rating')
+    cupcake.image_url = request.json.get('image_url')
 
+
+    #FIXME: ask about the garbage below
+    # for key in fields_to_update:
+    #     cupcake[key] = fields_to_update[key]
+
+    db.session.commit()
+    serialized = cupcake.serialize()
+
+    return (jsonify(cupcake=serialized), 200)
+
+    # can .get json fields to avoid errors or...
+    # is there a way to get all fields from .json??
+
+
+@app.delete("/api/cupcakes/<int:cupcake_id>")
+def delete_single_cupcake(cupcake_id):
+    """ Deletes a cupcake
+    """
+    ...
 
 
 
