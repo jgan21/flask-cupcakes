@@ -38,14 +38,13 @@ def create_cupcake():
 
     ##id flavor size rating image_url
 
-   # id = request.json["id"]
+   #id = request.json["id"]
     flavor = request.json["flavor"]
-    size = request.json.get("size")
-    breakpoint()
-    rating = request.json.get("rating")
+    size = request.json["size"]
+    rating = request.json["rating"]
     image_url = request.json.get("image_url")
 
-    new_cupcake = Cupcake(id=id,flavor=flavor,
+    new_cupcake = Cupcake(flavor=flavor,
                           size=size,rating=rating, image_url=image_url)
 
     db.session.add(new_cupcake)
