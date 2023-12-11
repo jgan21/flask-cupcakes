@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-DEFAULT_IMG = "https://tinyurl.com/demo-cupcake"
+DEFAULT_IMG_URL = "https://tinyurl.com/demo-cupcake"
 
 class Cupcake(db.Model):
     """Cupcake."""
@@ -12,7 +12,7 @@ class Cupcake(db.Model):
     __tablename__ = "cupcakes"
 
     id = db.Column(
-        db.Integer(),
+        db.Integer,
         primary_key=True,
         autoincrement=True,
     )
@@ -28,14 +28,14 @@ class Cupcake(db.Model):
     )
 
     rating = db.Column(
-        db.Integer(),
+        db.Integer,
         nullable=False,
     )
 
     image_url = db.Column(
         db.String(500),
         nullable=False,
-        default = DEFAULT_IMG,
+        default = DEFAULT_IMG_URL,
     )
 
     def serialize(self):

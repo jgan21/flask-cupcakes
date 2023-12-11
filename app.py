@@ -24,7 +24,7 @@ def list_all_cupcakes():
 
     return jsonify(cupcakes=serialized)
 
-@app.get("/api/cupcakes/<cupcake_id>")
+@app.get("/api/cupcakes/<int:cupcake_id>")
 def list_single_cupcake(cupcake_id):
     """Return a specific cupcake.
 
@@ -48,10 +48,14 @@ def create_cupcake():
     flavor = request.json["flavor"]
     size = request.json["size"]
     rating = request.json["rating"]
-    image_url = request.json.get("image_url")
+    image_url = request.json["image_url"] or None
 
-    new_cupcake = Cupcake(flavor=flavor,
-                          size=size,rating=rating, image_url=image_url)
+    new_cupcake = Cupcake(
+        flavor=flavor,
+        size=size,
+        rating=rating,
+        image_url=image_url
+    )
 
     db.session.add(new_cupcake)
     db.session.commit()
