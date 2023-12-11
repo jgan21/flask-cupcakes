@@ -94,10 +94,17 @@ def update_single_cupcake(cupcake_id):
 
 @app.delete("/api/cupcakes/<int:cupcake_id>")
 def delete_single_cupcake(cupcake_id):
-    """ Deletes a cupcake
-    """
-    ...
+    """ Deletes a cupcake.
 
+    Returns JSON: {deleted: [cupcake_id]}
+    """
+
+    cupcake = Cupcake.query.get_or_404(cupcake_id)
+
+    db.session.delete(cupcake)
+    db.session.commit()
+
+    return (jsonify(deleted=cupcake_id), 200)
 
 
 
