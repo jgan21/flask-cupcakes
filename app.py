@@ -13,7 +13,11 @@ connect_db(app)
 
 @app.get("/api/cupcakes")
 def list_all_cupcakes():
-    """Return JSON of all cupcakes."""
+    """Return all cupcakes.
+
+    Returns JSON:
+    {'cupcakes' : [{id, flavor, size, rating, image_url}, ...]}
+    """
 
     cupcakes = Cupcake.query.all()
     serialized = [c.serialize() for c in cupcakes]
@@ -22,7 +26,10 @@ def list_all_cupcakes():
 
 @app.get("/api/cupcakes/<cupcake_id>")
 def list_single_cupcake(cupcake_id):
-    """Return JSON {'cupcake' : {id, flavor, size, rating, image_url}}. """
+    """Return a specific cupcake.
+
+    Returns JSON : {'cupcake' : {id, flavor, size, rating, image_url}}.
+    """
 
     cupcake = Cupcake.query.get_or_404(cupcake_id)
     serialized = cupcake.serialize()
@@ -33,12 +40,11 @@ def list_single_cupcake(cupcake_id):
 def create_cupcake():
     """Create cupcake from post JSON and return it
 
-    Returns JSON {'cupcake': {...}}
+    Returns JSON : {'cupcake': {...}}
     """
 
     ##id flavor size rating image_url
 
-   #id = request.json["id"]
     flavor = request.json["flavor"]
     size = request.json["size"]
     rating = request.json["rating"]
