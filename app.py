@@ -11,7 +11,7 @@ app.config['SQLALCHEMY_ECHO'] = True
 
 connect_db(app)
 
-app.get("/api/cupcakes")
+@app.get("/api/cupcakes")
 def list_all_cupcakes():
     """Return JSON of all cupcakes."""
 
@@ -20,7 +20,7 @@ def list_all_cupcakes():
 
     return jsonify(cupcakes=serialized)
 
-app.get("/api/cupcakes/<cupcake_id>")
+@app.get("/api/cupcakes/<cupcake_id>")
 def list_single_cupcake(cupcake_id):
     """Return JSON {'cupcake' : {id, flavor, size, rating, image_url}}. """
 
@@ -28,5 +28,40 @@ def list_single_cupcake(cupcake_id):
     serialized = cupcake.serialize()
 
     return jsonify(cupcake=serialized)
+
+@app.post("/api/cupcakes")
+def create_cupcake():
+    """Create cupcake from post JSON and return it
+
+    Returns JSON {'cupcake': {...}}
+    """
+
+    ##id flavor size rating image_url
+
+   # id = request.json["id"]
+    flavor = request.json["flavor"]
+    size = request.json.get("size")
+    breakpoint()
+    rating = request.json.get("rating")
+    image_url = request.json.get("image_url")
+
+    new_cupcake = Cupcake(id=id,flavor=flavor,
+                          size=size,rating=rating, image_url=image_url)
+
+    db.session.add(new_cupcake)
+    db.session.commit()
+
+    serialized = new_cupcake.serialize()
+
+    return (jsonify(cupcake=serialized),201)
+
+
+
+
+
+
+
+
+
 
 
