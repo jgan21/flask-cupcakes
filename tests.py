@@ -106,11 +106,12 @@ class CupcakeViewsTestCase(TestCase):
 
             self.assertEqual(Cupcake.query.count(), 2)
 
-    def test_update_single_cupcake(self):
+    def test_update_single_cupcake_all_keys(self):
         with app.test_client() as client:
             url = f"/api/cupcakes/{self.cupcake_id}"
             CUPCAKE_DATA_2["flavor"] = "strawberry"
             resp = client.patch(url, json=CUPCAKE_DATA_2)
+            #TODO: right now we're passing all keys, add one that just includes single
 
             self.assertEqual(resp.status_code, 200)
 
@@ -124,6 +125,20 @@ class CupcakeViewsTestCase(TestCase):
                     "image_url": "http://test.com/cupcake2.jpg"
                 }
             })
+
+    def test_delete_single_cupcake(self):
+        with app.test_client() as client:
+            url = f"/api/cupcakes/{self.cupcake_id}"
+            resp = client.delete(url)
+            data = resp.json
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertEqual({
+                "deleted": self.cupcake_id
+            },data)
+
+    #TODO: missing tests: when no cupcake (404) >> test happy & sad path
+    #create a list of what could be returned inc. errors then write test cases for each
 
 
 

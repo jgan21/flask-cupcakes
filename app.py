@@ -11,6 +11,14 @@ app.config['SQLALCHEMY_ECHO'] = True
 
 connect_db(app)
 
+
+@app.get("/")
+def show_cupcake_form():
+    ...
+
+################################################################################
+# API ROUTES
+
 @app.get("/api/cupcakes")
 def list_all_cupcakes():
     """Return all cupcakes.
@@ -72,14 +80,18 @@ def update_single_cupcake(cupcake_id):
     """
     cupcake = Cupcake.query.get_or_404(cupcake_id)
 
+    cupcake.flavor = request.json.get('flavor',cupcake.flavor)
+    cupcake.size = request.json.get('size',cupcake.size)
+    cupcake.rating = request.json.get('rating',cupcake.rating)
 
-    cupcake.flavor = request.json.get('flavor')
-    cupcake.size = request.json.get('size')
-    cupcake.rating = request.json.get('rating')
-    cupcake.image_url = request.json.get('image_url')
+    #FIXME: if empty string passed, empty string is set, default value
+    # only used on initial set, never used again (such as when val changes)
+    # need to check for empty string here, else default url we want
+    cupcake.image_url = request.json.get('image_url', cupcake.image_url)
 
 
-    #FIXME: ask about the garbage below
+    # ask about the garbage below << also vulnerable to extra fields...
+    # totally fine to be explicit for current size of model
     # for key in fields_to_update:
     #     cupcake[key] = fields_to_update[key]
 
@@ -87,7 +99,7 @@ def update_single_cupcake(cupcake_id):
     serialized = cupcake.serialize()
 
     return (jsonify(cupcake=serialized), 200)
-
+    #TODO: only need to specify status code if not 200, otherwise implied
     # can .get json fields to avoid errors or...
     # is there a way to get all fields from .json??
 
@@ -96,7 +108,7 @@ def update_single_cupcake(cupcake_id):
 def delete_single_cupcake(cupcake_id):
     """ Deletes a cupcake.
 
-    Returns JSON: {deleted: [cupcake_id]}
+    Returns JSON: {deleted: cupcake_id}
     """
 
     cupcake = Cupcake.query.get_or_404(cupcake_id)
@@ -104,7 +116,7 @@ def delete_single_cupcake(cupcake_id):
     db.session.delete(cupcake)
     db.session.commit()
 
-    return (jsonify(deleted=cupcake_id), 200)
+    return jsonify(deleted=cupcake_id)
 
 
 
