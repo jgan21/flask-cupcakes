@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cupcaaaaaakes</title>
-  <script
+  <!-- <script
   src="https://code.jquery.com/jquery-3.7.1.min.js"
   integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-  crossorigin="anonymous"></script>
+  crossorigin="anonymous"></script> -->
 </head>
 <body>
   <div class="container">
@@ -19,21 +19,24 @@
   <form id="add_cupcake_form" method="POST">
     <div>
       <label for="flavor">Flavor:</label>
-        <input name="flavor" type="text">
+        <input id="flavor" name="flavor" type="text">
     </div>
     <div>
       <label for="size">Size: </label>
-        <input name="" type="text">
+        <input id="size" name="size" type="text">
     </div>
     <div>
       <label for="rating">Rating: </label>
-        <input name="rating" type="text">
+        <input id="rating" name="rating" type="text">
     </div>
     <div>
       <label for="image_url">Image URL: </label>
-        <input name="image_url" type="url">
+        <input id="image_url" name="image_url" type="url">
     </div>
     <button type="submit">EXPLOSION OF FLAVOR!</button>
   </form>
+
+  <script src="http://unpkg.com/jquery"></script>
+  <script src="/static/front_end.js"></script>
 </body>
 </html>
