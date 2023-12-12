@@ -2,7 +2,7 @@
 
 import os
 from flask import Flask, request, jsonify
-from models import db, connect_db, Cupcake
+from models import db, connect_db, Cupcake, DEFAULT_IMG_URL
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
@@ -87,7 +87,8 @@ def update_single_cupcake(cupcake_id):
     #FIXME: if empty string passed, empty string is set, default value
     # only used on initial set, never used again (such as when val changes)
     # need to check for empty string here, else default url we want
-    cupcake.image_url = request.json.get('image_url', cupcake.image_url)
+    if "image_url" in request.json:
+        cupcake.image_url = request.json["image_url"] or DEFAULT_IMG_URL
 
 
     # ask about the garbage below << also vulnerable to extra fields...
@@ -98,7 +99,8 @@ def update_single_cupcake(cupcake_id):
     db.session.commit()
     serialized = cupcake.serialize()
 
-    return (jsonify(cupcake=serialized), 200)
+    return jsonify(cupcake=serialized)
+
     #TODO: only need to specify status code if not 200, otherwise implied
     # can .get json fields to avoid errors or...
     # is there a way to get all fields from .json??

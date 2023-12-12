@@ -42,6 +42,7 @@ class CupcakeViewsTestCase(TestCase):
         db.session.commit()
 
         self.cupcake_id = cupcake.id
+        print("cupcake_added=", self.cupcake_id)
 
     def tearDown(self):
         """Clean up fouled transactions."""
@@ -126,6 +127,26 @@ class CupcakeViewsTestCase(TestCase):
                 }
             })
 
+    def test_update_single_cupcake_one_key(self):
+        with app.test_client() as client:
+            url = f"/api/cupcakes/{self.cupcake_id}"
+
+            resp = client.patch(url, json={"flavor": "peach"})
+            #TODO: right now we're passing all keys, add one that just includes single
+
+            self.assertEqual(resp.status_code, 200)
+
+            data = resp.json
+
+            self.assertEqual({"cupcake" : {
+                "id" : self.cupcake_id,
+                "flavor": "peach",
+                "size": "TestSize",
+                "rating": 5,
+                "image_url": "http://test.com/cupcake.jpg"}
+                } , data
+            )
+
     def test_delete_single_cupcake(self):
         with app.test_client() as client:
             url = f"/api/cupcakes/{self.cupcake_id}"
@@ -135,8 +156,14 @@ class CupcakeViewsTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertEqual({
                 "deleted": self.cupcake_id
-            },data)
+            } ,data)
 
+    def test_missing_cupcake(self):
+        with app.test_client() as client:
+            url = "api/cupcakes/250"
+            resp = client.delete(url)
+
+            self.assertEqual(resp.status_code, 404)
     #TODO: missing tests: when no cupcake (404) >> test happy & sad path
     #create a list of what could be returned inc. errors then write test cases for each
 
