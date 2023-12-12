@@ -1,7 +1,7 @@
 """Flask app for Cupcakes"""
 
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from models import db, connect_db, Cupcake, DEFAULT_IMG_URL
 
 app = Flask(__name__)
@@ -14,7 +14,8 @@ connect_db(app)
 
 @app.get("/")
 def show_cupcake_form():
-    ...
+
+    return render_template('homepage.html')
 
 ################################################################################
 # API ROUTES
